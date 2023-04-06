@@ -101,38 +101,41 @@ pipeline {
         }
         stage('GKE connect'){
             steps{
+
+                withCredentials([file(credentialsId: 'gcloud-creds', variable: 'GCLOUD_CREDS')]) {
+
                 sh'''
-                gcloud auth login
-                export GOOGLE_APPLICATION_CREDENTIALS=/cicd-project-375614-95e9c0670813.json
+
                 gcloud container clusters get-credentials ${params.cluster} --region ${params.region} --project ${params.projectid}
                 '''
-            }
-        }
-
-        stage('GKE deployments'){
-            when { expression { params.action == 'create'}}
-            steps{
-
-                script{
-                    def apply = false
-                    try{
-                        input message: 'press apply to initiate the deployments', ok: 'Ready to apply the config'
-                        apply = true
-                    }
-                    catch(err){
-                        apply = false
-                        CurrentBuild.result= 'UNSTABLE'
-                    }
-                    if(apply){
-                        sh '''
-                        kubectl apply -f .
-                        ''';
-                    }
                 }
             }
         }
 
-    }
+    //     stage('GKE deployments'){
+    //         when { expression { params.action == 'create'}}
+    //         steps{
+
+    //             script{
+    //                 def apply = false
+    //                 try{
+    //                     input message: 'press apply to initiate the deployments', ok: 'Ready to apply the config'
+    //                     apply = true
+    //                 }
+    //                 catch(err){
+    //                     apply = false
+    //                     CurrentBuild.result= 'UNSTABLE'
+    //                 }
+    //                 if(apply){
+    //                     sh '''
+    //                     kubectl apply -f .
+    //                     ''';
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    // }
 
     post {
 		  always {
