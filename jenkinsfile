@@ -105,7 +105,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'gcloud-creds', variable: 'GCLOUD_CREDS')]) {
 
                 sh'''
-                sh gcloud auth activate-service-account --key-file=$GCLOUD_CREDS
+                gcloud auth activate-service-account --key-file=$GCLOUD_CREDS
                 gcloud container clusters get-credentials ${params.cluster} --region ${params.region} --project ${params.projectid}
                 ''';
                 }
