@@ -1,5 +1,13 @@
 pipeline {
     agent any
+
+    parameters {
+
+        choice(name: 'action', choices: 'create\ndestroy\ndestroycluster', description: 'create or update or destroy a cluster')
+        string(name: 'cluster', defaultValue: 'cluster-klajdi-production', description: 'GKE cluster name')
+        string(name: 'region', defaultValue: 'us-central1', description: 'GKE cluster region')
+        string(name: 'projectid', defaultValue: 'cicd-project-375614', description: 'GKE project id')
+    }
     environment {
         VERSION = "${env.BUILD_ID}"
     }
@@ -88,6 +96,38 @@ pipeline {
                        }
                     }
 
+                }
+            }
+        }
+        stage('GKE connect'){
+            steps{
+                sh'''
+                gcloud auth login
+                export GOOGLE_APPLICATION_CREDENTIALS=/cicd-project-375614-95e9c0670813.json
+                gcloud container clusters get-credentials ${params.cluster} --region ${params.region} --project ${params.projectid}
+                '''
+            }
+        }
+
+        stage('GKE deployments'){
+            when { expression { params.action == 'create'}}
+            steps{
+
+                script{
+                    def apply = false
+                    try{
+                        input message: 'press apply to initiate the deployments', ok: 'Ready to apply the config'
+                        apply = true
+                    }
+                    catch(err){
+                        apply = false
+                        CurrentBuild.result= 'UNSTABLE'
+                    }
+                    if(apply){
+                        sh '''
+                        kubectl apply -f .
+                        ''';
+                    }
                 }
             }
         }
