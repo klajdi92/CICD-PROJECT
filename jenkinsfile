@@ -4,9 +4,9 @@ pipeline {
     parameters {
 
         choice(name: 'action', choices: 'create\ndestroy\ndestroycluster', description: 'create or update or destroy a cluster')
-        string(name: 'cluster', defaultValue: 'cluster-klajdi-production', description: 'GKE cluster name')
-        string(name: 'region', defaultValue: 'us-central1', description: 'GKE cluster region')
-        string(name: 'projectid', defaultValue: 'cicd-project-375614', description: 'GKE project id')
+        string(name: 'CLUSTER', defaultValue: 'cluster-klajdi-production', description: 'GKE cluster name')
+        string(name: 'REGION', defaultValue: 'us-central1', description: 'GKE cluster region')
+        string(name: 'PROJECTID', defaultValue: 'cicd-project-375614', description: 'GKE project id')
     }
     environment {
         VERSION = "${env.BUILD_ID}"
@@ -106,7 +106,7 @@ pipeline {
 
                 sh'''
                 gcloud auth activate-service-account --key-file=$GCLOUD_CREDS
-                gcloud container clusters get-credentials ${params.cluster} --region ${params.region} --project ${params.projectid}
+                gcloud container clusters get-credentials ${params.CLUSTER} --region ${params.REGION} --project ${params.PROJECTID}
 
                 '''
                 }
