@@ -106,7 +106,7 @@ pipeline {
 
                 sh'''
                 gcloud auth activate-service-account --key-file=$GCLOUD_CREDS
-                gcloud container clusters get-credentials ${params.CLUSTER} --region ${params.REGION} --project ${params.PROJECTID}
+                gcloud container clusters get-credentials ${CLUSTER} --region ${REGION} --project ${PROJECTID}
 
                 '''
                 }
