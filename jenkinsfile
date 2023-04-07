@@ -114,13 +114,14 @@ pipeline {
         }
 
         stage('GKE deployments'){
+            dir('kubernetes/'){
             when { expression { params.action == 'create'}}
             steps{
 
                 script{
                     def apply = false
                     try{
-                        input message: 'press apply to initiate the deployments', ok: 'Ready to apply the config'
+                        input message: 'press apply to initiate the deployments', ok: 'Apply  the deployments to cluster'
                         apply = true
                     }
                     catch(err){
@@ -131,6 +132,7 @@ pipeline {
                         sh '''
                         kubectl apply -f .
                         '''
+                      }
                     }
                 }
             }
