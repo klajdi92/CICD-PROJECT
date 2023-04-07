@@ -114,9 +114,9 @@ pipeline {
         }
 
         stage('GKE deployments'){
-             dir('kubernetes/'){
             when { expression { params.action == 'create'}}
             steps{
+                 dir('kubernetes/'){
 
                 script{
                     def apply = false
