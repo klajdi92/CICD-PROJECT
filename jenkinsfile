@@ -116,8 +116,6 @@ pipeline {
         stage('GKE deployments'){
             when { expression { params.action == 'create'}}
             steps{
-                 dir('kubernetes/'){
-
                 script{
                     def apply = false
                     try{
@@ -132,7 +130,7 @@ pipeline {
                         sh '''
                         kubectl apply -f .
                         '''
-                      }
+                      
                     }
                 }
             }
