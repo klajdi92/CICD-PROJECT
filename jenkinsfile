@@ -130,7 +130,7 @@ pipeline {
                     }
                     if(apply){
                         sh '''
-                        kubectl apply -f .
+                        helm upgrade --install --set image.repository="34.133.53.145:8083/springapp" --set image.tag="${VERSION}" klajdiapp myapp/
                         '''
                       }
                      }
