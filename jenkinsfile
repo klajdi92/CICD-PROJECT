@@ -130,7 +130,7 @@ pipeline {
                     if(apply){
                         sh '''
                         kubectl apply -f .
-                        ''';
+                        '''
                     }
                 }
             }
