@@ -101,7 +101,7 @@ pipeline {
         }
         stage('GKE connect'){
             steps{
-
+               
                 withCredentials([file(credentialsId: 'gcloud-creds', variable: 'GCLOUD_CREDS')]) {
 
                 sh'''
@@ -117,6 +117,8 @@ pipeline {
             when { expression { params.action == 'create'}}
             steps{
                 script{
+                  withCredentials([string(credentialsId: 'nexus_password', variable: 'nexus_creds')]) {
+                       dir('kubernetes/') {
                     def apply = false
                     try{
                         input message: 'press apply to initiate the deployments', ok: 'Apply  the deployments to cluster'
@@ -130,7 +132,8 @@ pipeline {
                         sh '''
                         kubectl apply -f .
                         '''
-                      
+                      }
+                     }
                     }
                 }
             }
