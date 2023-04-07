@@ -130,7 +130,7 @@ pipeline {
                     }
                     if(apply){
                         sh '''
-                        helm upgrade --install --set image.repository="34.133.53.145:8083/springapp" --set image.tag="${VERSION}" klajdiapp3 myapp/
+                        helm upgrade --install --set image.repository="34.133.53.145:8083/springapp" --set image.tag="${VERSION}" klajdiapp4 myapp/
                         '''
                       }
                      }
